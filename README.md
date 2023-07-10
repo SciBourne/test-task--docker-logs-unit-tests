@@ -19,3 +19,25 @@ async def logs(container: str, name: str) -> None:
                 print(name, line)
 
 ```
+
+<br>
+
+## Запуск тестов
+
+**NOTE:** Все тесты запускаются из корневого каталога проекта.
+
+<br>
+
+Полный набор:
+```shell
+user@host ~/project-dir $ pytest
+```
+Только рекомендуемый набор:
+```shell
+user@host ~/project-dir $ pytest -m logs
+```
+
+Только aiohttp-специфичные тесты:
+```shell
+user@host ~/project-dir $ pytest -m logs_aiohttp_specific
+```
