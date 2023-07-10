@@ -46,6 +46,8 @@ user@host ~/project-dir $ pytest -m logs_aiohttp_specific
 
 ## Описание
 
+<br>
+
 ### Рекомендуемый набор
 
 Для рекомендуемого набора тестов, объединённых под классом `TestLogs`, не принципиально, какой в функции `logs` используется http-клиент. Изолируясь stub-сервером и mock-объектами, проверяется, действительно ли функция устанавливает соединение средствами **HTTP** поверх **Unix Domain Socket**, в частности, подразумевается получение доступа к **Docker API**, принимает поток данных журнала в виде строк и выводит их на печать в `stdout`.
@@ -54,6 +56,8 @@ user@host ~/project-dir $ pytest -m logs_aiohttp_specific
 ```shell
 user@host ~/project $ curl --unix-socket /var/run/docker.sock http://xx/containers/9c0aae524a78/logs
 ```
+
+<br>
 
 ### aiohttp-специфичный набор
 
