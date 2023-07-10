@@ -30,27 +30,27 @@ async def logs(container: str, name: str) -> None:
 
 Сборка проекта:
 ```shell
-user@host ~ $ git clone https://github.com/SciBourne/test-task--docker-logs-unit-tests.git
-user@host ~ $ cd test-task--docker-logs-unit-tests
+git clone https://github.com/SciBourne/test-task--docker-logs-unit-tests.git
+cd test-task--docker-logs-unit-tests
 
-user@host ~/test-task--docker-logs-unit-tests $ poetry env use python 3.11
-user@host ~/test-task--docker-logs-unit-tests $ poetry install
+poetry env use python 3.11
+poetry install
 ```
 
 <br>
 
 Полный набор:
 ```shell
-user@host ~/project-dir $ pytest
+poetry run pytest
 ```
 Только рекомендуемый набор:
 ```shell
-user@host ~/project-dir $ pytest -m logs
+poetry run pytest -m logs
 ```
 
 Только aiohttp-специфичные тесты:
 ```shell
-user@host ~/project-dir $ pytest -m logs_aiohttp_specific
+poetry run pytest -m logs_aiohttp_specific
 ```
 
 <br>
@@ -65,7 +65,7 @@ user@host ~/project-dir $ pytest -m logs_aiohttp_specific
 
 Функция должна быть относительно эквивалентна запросу:
 ```shell
-user@host ~/project $ curl --unix-socket /var/run/docker.sock http://xx/containers/9c0aae524a78/logs
+curl --unix-socket /var/run/docker.sock http://xx/containers/9c0aae524a78/logs
 ```
 
 <br>
