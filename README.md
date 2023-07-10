@@ -28,6 +28,17 @@ async def logs(container: str, name: str) -> None:
 
 <br>
 
+Сборка проекта:
+```shell
+user@host ~ $ git clone https://github.com/SciBourne/test-task--docker-logs-unit-tests.git
+user@host ~ $ cd test-task--docker-logs-unit-tests
+
+user@host ~/test-task--docker-logs-unit-tests $ poetry env use python 3.11
+user@host ~/test-task--docker-logs-unit-tests $ poetry install
+```
+
+<br>
+
 Полный набор:
 ```shell
 user@host ~/project-dir $ pytest
