@@ -33,7 +33,7 @@ async def logs(container: str, name: str) -> None:
 git clone https://github.com/SciBourne/test-task--docker-logs-unit-tests.git
 cd test-task--docker-logs-unit-tests
 
-poetry env use python 3.11
+poetry env use python3.11
 poetry install
 ```
 
