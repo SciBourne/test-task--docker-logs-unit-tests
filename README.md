@@ -7,6 +7,8 @@
 [![gitlab-ci: aiohttp-specific-tests](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/aiohttp-specific-tests.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
 
 
+<br>
+
 # Тестовое задание
 
 <br>
