@@ -4,7 +4,7 @@
 [![gitlab-ci: build](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/build.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
 [![gitlab-ci: type-check](http://scibourne.gitlab.io/test-docker-logs-unit-tests/type-check.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
 [![gitlab-ci: unit-tests](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/unit-tests.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
-[![gitlab-ci: api-tests](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/aiohttp-specific-tests.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
+[![gitlab-ci: aiohttp-specific-tests](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/aiohttp-specific-tests.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
 
 
 # Тестовое задание
