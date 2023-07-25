@@ -1,0 +1,28 @@
+name: GitLab mirror
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  repository_mirroring:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Push to GitLab mirror
+        env:
+          name_token: github-mirroring
+          token: ${{ secrets.GITLAB_ACCESS_TOKEN }}
+
+          user: SciBourne
+          repo_src: test-task--docker-logs-unit-tests.git
+          repo_dst: test-task-docker-logs-unit-tests.git
+
+        run: |
+          git clone --bare https://github.com/${user}/${repo_src}
+          cd $repo_src
+          git push --mirror https://${name_token}:${token}@gitlab.com/${user}/${repo_dst}
