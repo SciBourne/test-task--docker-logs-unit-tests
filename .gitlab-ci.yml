@@ -1,0 +1,128 @@
+image: python:3.11
+
+stages:
+  - build
+  - type-check
+  - unit-tests
+  - aiohttp-specific-tests
+  - codecov
+  - publish-badges
+
+
+.base-template: &base-template
+  allow_failure: true
+
+  variables:
+    POETRY_HOME: .poetry
+    POETRY_BIN: $POETRY_HOME/bin
+    POETRY_VIRTUALENVS_PATH: $POETRY_HOME/.venv
+
+    STAGE_STATES: .stage_states
+
+  after_script:
+    - state_path=$STAGE_STATES/$CI_JOB_STAGE
+    - touch $state_path
+
+    - |
+
+      if [ $CI_JOB_STATUS == 'success' ]
+      then
+          echo 'passing' > $state_path
+      else
+          echo 'failing' > $state_path
+      fi
+
+  artifacts:
+    paths:
+      - $POETRY_HOME
+      - $STAGE_STATES
+
+    expire_in: 20 mins
+    when: always
+
+
+prepare project:
+  <<: *base-template
+
+  stage: build
+  script:
+    - mkdir -p $POETRY_VIRTUALENVS_PATH
+    - mkdir $STAGE_STATES
+
+    - python3.11 -m venv $POETRY_HOME
+    - $POETRY_BIN/pip install poetry
+
+    - $POETRY_BIN/poetry env use python3.11
+    - $POETRY_BIN/poetry install
+
+
+run type-check:
+  <<: *base-template
+
+  stage: type-check
+  script:
+    - $POETRY_BIN/poetry run mypy src/
+
+
+run unit-tests:
+  <<: *base-template
+  stage: unit-tests
+  script:
+    - $POETRY_BIN/poetry run pytest -m logs
+
+
+run api-tests:
+  <<: *base-template
+  stage: aiohttp-specific-tests
+  script:
+    - $POETRY_BIN/poetry run pytest -m logs_aiohttp_specific
+
+
+codecov update:
+  <<: *base-template
+
+  stage: codecov
+  after_script: null
+
+  script:
+    - curl -Os https://uploader.codecov.io/latest/linux/codecov
+    - chmod +x codecov
+
+    - $POETRY_BIN/poetry run pytest --cov . --cov-report=xml
+    - ./codecov -f coverage.xml
+
+
+pages:
+  <<: *base-template
+
+  stage: publish-badges
+  after_script: null
+
+  script:
+    - mkdir public
+    - $POETRY_BIN/poetry add anybadge
+
+    - |
+
+      for stage_path in $STAGE_STATES/*
+      do
+          stage_name=$(basename $stage_path)
+          stage_status=$(cat $stage_path)
+
+          echo " -> ${stage_name}: [ $stage_status ]"
+
+          $POETRY_BIN/poetry run anybadge \
+          --label=$stage_name \
+          --value=$stage_status \
+          --file=public/${stage_name}.svg \
+          passing=green \
+          failing=red
+
+      done
+
+  artifacts:
+    paths:
+      - public
+
+  only:
+    - main
