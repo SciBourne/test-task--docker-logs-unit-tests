@@ -171,19 +171,35 @@ class TestLogsAiohttpSpecific:
         "kwargs": None
     }
 
-    def get_stub(self, *args, **kwargs):
-        return FakeRequestContextManager(content=self.DUMMY_CONTENT)
+    @pytest.fixture
+    def dummy_unix_connector(self, monkeypatch):
+        async def dummy(*args, **kwargs):
+            pass
 
-    def args_capture(self, *args, **kwargs):
-        self.arg_buffer.update(args=args, kwargs=kwargs)
+        monkeypatch.setattr(UnixConnector, "_create_connection", dummy)
+
+    @pytest.fixture
+    def stub_client_session_get(self, monkeypatch):
+        def stub(*args, **kwargs):
+            return FakeRequestContextManager(content=self.DUMMY_CONTENT)
+
+        monkeypatch.setattr(ClientSession, "get", stub)
+
+    @pytest.fixture
+    def init_args_capture(self, monkeypatch):
+        def patch(target_class):
+            def arg_saver(*args, **kwargs):
+                self.arg_buffer.update(args=args, kwargs=kwargs)
+
+            monkeypatch.setattr(target_class, "__init__", arg_saver)
+
+        return patch
 
     @pytest.mark.asyncio
-    async def test_logs_content(self, monkeypatch, capsys):
-        monkeypatch.setattr(
-            ClientSession,
-            "get",
-            self.get_stub
-        )
+    async def test_logs_content(self,
+                                capsys,
+                                dummy_unix_connector,
+                                stub_client_session_get):
 
         await logs(
             container=self.DUMMY_CONTAINER,
@@ -194,14 +210,9 @@ class TestLogsAiohttpSpecific:
         assert logs_content.out == self.CONTROL_STDOUT
 
     @pytest.mark.asyncio
-    async def test_logs_connector(self, monkeypatch):
+    async def test_logs_connector(self, init_args_capture):
+        init_args_capture(target_class=ClientSession)
         self.arg_buffer.update(args=None, kwargs=None)
-
-        monkeypatch.setattr(
-            ClientSession,
-            "__init__",
-            self.args_capture
-        )
 
         try:
             await logs(container=None, name=None)
@@ -218,14 +229,13 @@ class TestLogsAiohttpSpecific:
                 assert connector.path == self.CONTROL_UNIX_SOCKET_PATH
 
     @pytest.mark.asyncio
-    async def test_logs_url(self, monkeypatch):
-        self.arg_buffer.update(args=None, kwargs=None)
+    async def test_logs_url(self,
+                            dummy_unix_connector,
+                            stub_client_session_get,
+                            init_args_capture):
 
-        monkeypatch.setattr(
-            ClientResponse,
-            "__init__",
-            self.args_capture
-        )
+        init_args_capture(target_class=ClientResponse)
+        self.arg_buffer.update(args=None, kwargs=None)
 
         try:
             await logs(
