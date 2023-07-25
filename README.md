@@ -1,7 +1,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 
-
+[![codecov](https://codecov.io/gh/SciBourne/test-task--docker-logs-unit-tests/branch/main/graph/badge.svg?token=OGV48MY9TY)](https://codecov.io/gh/SciBourne/test-task--docker-logs-unit-tests)
 [![gitlab-ci: build](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/build.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
 [![gitlab-ci: type-check](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/type-check.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
 [![gitlab-ci: unit-tests](http://scibourne.gitlab.io/test-task-docker-logs-unit-tests/unit-tests.svg)](https://gitlab.com/SciBourne/test-task-docker-logs-unit-tests)
